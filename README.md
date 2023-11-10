@@ -35,6 +35,30 @@ bun start
 
 The default port for the API is `8080`, in case you want to edit it just change the `PORT` variable in the `.env` file to whatever suits the best.
 
+## 🐳 Docker
+
+You can run this API using Docker as well. To do so, just run:
+
+```bash
+docker build -t talent-protocol-ai-api:latest .
+```
+
+Once it's built, you can run it using:
+
+```bash
+docker run -it --rm -d -p 8080:8080 talent-protocol-ai-api:latest
+```
+
+Refer to the [docker docs](https://docs.docker.com/engine/reference/commandline/run/) for more information about the `docker run` command.
+
+You can also build the Docker image using `distroless`. You just need to change the `Dockerfile` to use the `distroless` base image and then run:
+
+```bash
+docker build -t talent-protocol-ai-api:latest -f Dockerfile.distroless .
+```
+
+If you are using docker and you don't want to use a `.env` file, make sure to pass the environment variables to the running docker container using the `-e` or `--env` flag.
+
 ### ‼️ Rate limiting
 
 This API is rate limited in order to avoid any type of spam. The rate limiting is provided by the `elysia-rate-limit` package.
