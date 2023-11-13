@@ -1,6 +1,6 @@
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { SystemMessage, HumanMessage, AIMessage } from "langchain/schema";
-import { goalGeneratorSystemTemplate } from "../constants";
+import { goalGeneratorSystemTemplate, descriptionGeneratorSystemTemplate } from "../constants";
 import { env } from "../env";
 
 /**
