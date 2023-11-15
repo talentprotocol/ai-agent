@@ -40,11 +40,7 @@ const app = new Elysia()
   )
   .group("/api/v0", (app) =>
     app.group("/ai", (aiGroup) =>
-      aiGroup.post(
-        "/:talentId/goals",
-        goalGeneratorHandler,
-        goalGeneratorAPIDetails
-      )
+      aiGroup.post("/goals", goalGeneratorHandler, goalGeneratorAPIDetails)
     )
   )
   .listen(env.PORT);

@@ -1,32 +1,70 @@
-import { db } from "../db";
+import { env } from "../env";
 import { callLLM } from "../lib/ai";
 
 /**
  * ElysiaJS handler for generating goals.
- * @param {{ params: { talentId: string }; body: { history: string[][] }; }} input function input.
+ * @param {any} input function input.
  * @returns {Promise<Response>} returns a JSON containing the list of generated goals.
  */
 export const goalGeneratorHandler = async ({
-  params: { talentId },
   body,
 }: {
-  params: { talentId: string };
-  body: { history: string[][] };
+  body: {
+    history: string[][];
+    talentId?: string;
+    bio?: string;
+    interests?: string[];
+    experience?: string[];
+  };
 }): Promise<Response> => {
-  // retrieve the talent from the mock db
-  // TODO: change it to the Talent Protocol API request
-  const talent = db.find((t) => t.id === talentId);
-  // return 404 if no talent is found with that ID
-  if (!talent) {
-    return new Response(
-      JSON.stringify({ error: `Talent with id ${talentId} not found` }),
+  const { talentId } = body;
+  let bio: string, interests: string[], experience: string[];
+
+  if (talentId) {
+    // retrieve the talent from the mock db
+    const response = await fetch(
+      `https://api.talentprotocol.com/api/v1/talents/${talentId}`,
       {
-        status: 404,
+        method: "GET",
+        headers: {
+          "X-API-KEY": env.TP_API_KEY,
+        },
       }
     );
+
+    if (response.status === 404) {
+      return new Response(
+        JSON.stringify({ error: `Talent with id ${talentId} not found` }),
+        {
+          status: 404,
+        }
+      );
+    }
+
+    const { talent } = await response.json();
+    const { about, summary, tags, experiences } = talent;
+    // extract bio, interests and experience
+    bio = about || summary;
+    interests = tags.map((tag: { label: string }) => tag.label);
+    experience = experiences.map(
+      (experience: {
+        title: string;
+        institution: string;
+        description: string;
+      }) =>
+        `${experience.title} - ${experience.institution} - ${experience.description}`
+    );
+  } else if (body.bio && body.interests && body.experience) {
+    // use the body data
+    bio = body.bio;
+    interests = body.interests;
+    experience = body.experience;
+  } else {
+    return new Response(
+      JSON.stringify({ error: `Invalid request, check the input body.` }),
+      { status: 400 }
+    );
   }
-  // extract bio, interests and experience
-  const { bio, interests, experience } = talent;
   // user prompt.
   const prompt = `
   Bio: ${bio}
