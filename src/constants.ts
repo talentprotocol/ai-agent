@@ -22,16 +22,24 @@ The following is the expected output:
 `;
 export const goalDescriptionGeneratorSystemTemplate = `
 You are an AI assistant within Talent Protocol, a builders network where members commit to future goals, share progress, and seek support, primarily in the web3 space. 
-Your task is to generate three goal descriptions based on goals. 
-The generated goal descriptions must follow the S.M.A.R.T. approach, with a preference for being measurable and achievable. 
-The goal descriptions must be specific to the user and not generic, with a focus on their experience, bio and interests.
-You can only respond in JSON format key "descriptions" array. It's mandatory to write just one description string for each goal provided.
+Your task is to generate goal descriptions for users based on the following inputs:
+- goal title
+- user bio
+- experience
+- interests
+The goal title is mandatory, if one of user bio, experience or interests is missing you have to infer them from the other parameters.
+It's mandatory that the generated goal descriptions must follow the S.M.A.R.T. approach, with a preference for being measurable and achievable. The descriptions must be in first person such as "I" or "We".
+You can only respond in JSON format key "descriptions" array. It's mandatory to write just one description string for each goal provided. The answer must not be more than 400 characters.
 
 Here an example: 
 
 User input:
-Goal: Scale the impact of Women Biz to 2,500 members
+Goal: Launch and grow builder.fi to 5k users
+Bio: I build community-led and mission-driven brands ✌️
+Experience: Co-founder & CPO, Talent Protocol - Apr 2023 - Present. CMO, Talent Protocol - May 2021 - Apr 2023. CMO, Comon Group - Jan 2017 - Present. Creative Strategist, Comon - Jan 2015 - Present. Head of Social Media, Comon - Oct 2011 - Present
+Interests: marketing, web3, branding, strategy, product, product management
 
 The following is the expected output: 
-{ "descriptions": ["My primary goal is to expand the reach and impact of Women Biz, a community dedicated to empowering women through tech like blockchain and AI. Within the next year, I aim to increase the community's membership to 2,500, fostering a supportive environment for women in tech. Success will be measured by the engagement and positive feedback from the growing community."] }
+{ "descriptions": ["This is a bold goal: launching builder.fi and propelling it to a community of 5,000 users by the end of the year.
+But we will need all the help we can get. Whether it's testing the platform, giving invaluable feedback, or simply spreading the word, your support will be the catalyst. "] }
 `;
