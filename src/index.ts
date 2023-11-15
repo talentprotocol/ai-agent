@@ -1,7 +1,13 @@
 import swagger from "@elysiajs/swagger";
 import { Elysia } from "elysia";
-import { goalGeneratorHandler } from "./controllers";
-import { goalGeneratorAPIDetails } from "./lib/swagger";
+import {
+  goalDescriptionGeneratorHandler,
+  goalGeneratorHandler,
+} from "./controllers";
+import {
+  goalDescriptionGeneratorAPIDetails,
+  goalGeneratorAPIDetails,
+} from "./lib/swagger";
 import { logger } from "@bogeychan/elysia-logger";
 import { rateLimit } from "elysia-rate-limit";
 import { env } from "./env";
@@ -40,7 +46,13 @@ const app = new Elysia()
   )
   .group("/api/v0", (app) =>
     app.group("/ai", (aiGroup) =>
-      aiGroup.post("/goals", goalGeneratorHandler, goalGeneratorAPIDetails)
+      aiGroup
+        .post("/goals", goalGeneratorHandler, goalGeneratorAPIDetails)
+        .post(
+          "/goals/description",
+          goalDescriptionGeneratorHandler,
+          goalDescriptionGeneratorAPIDetails
+        )
     )
   )
   .listen(env.PORT);

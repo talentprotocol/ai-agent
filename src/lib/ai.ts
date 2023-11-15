@@ -1,6 +1,9 @@
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { SystemMessage, HumanMessage, AIMessage } from "langchain/schema";
-import { goalGeneratorSystemTemplate, descriptionGeneratorSystemTemplate } from "../constants";
+import {
+  goalGeneratorSystemTemplate,
+  goalDescriptionGeneratorSystemTemplate,
+} from "../constants";
 import { env } from "../env";
 
 /**
@@ -44,6 +47,31 @@ export const callLLM = async (
       );
     }
   }
+  // call the llm
+  const response = await llm.call(messages);
+
+  return response.content.toString();
+};
+
+/**
+ * Function that calls OpenAI chat model with the given prompt
+ * @param {string} prompt
+ * @returns {string} returns the response from the OpenAI chat model.
+ */
+export const callLLMPrompt = async (prompt: string): Promise<string> => {
+  const llm = new ChatOpenAI({
+    modelName: "gpt-3.5-turbo-1106",
+    temperature: 0,
+    openAIApiKey: env.OPENAI_API_KEY,
+  });
+  // initialize the messages to send to the model
+  const systemMessage = new SystemMessage({
+    content: goalDescriptionGeneratorSystemTemplate,
+  });
+  const userMessage = new HumanMessage({
+    content: prompt,
+  });
+  const messages = [systemMessage, userMessage];
   // call the llm
   const response = await llm.call(messages);
 

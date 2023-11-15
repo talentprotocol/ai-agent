@@ -89,18 +89,24 @@ export const goalGeneratorHandler = async ({
   }
 };
 
-// export const goalDescriptionGeneratorHandler = async ({
-//   params: { talentId },
-// }: {
-//   params: { talentId: string };
-// }) => {
-//   const talent = db.find((t) => t.id === talentId);
-//   if (!talent) {
-//     return new Response(
-//       JSON.stringify({ error: `Talent with id ${talentId} not found` }),
-//       {
-//         status: 404,
-//       }
-//     );
-//   }
-// };
+export const goalDescriptionGeneratorHandler = async ({
+  body,
+}: {
+  body: {
+    goal: string;
+    talentId?: string;
+    bio?: string;
+    interests?: string[];
+    experience?: string[];
+  };
+}) => {
+  // const talent = db.find((t) => t.id === talentId);
+  // if (!talent) {
+  //   return new Response(
+  //     JSON.stringify({ error: `Talent with id ${talentId} not found` }),
+  //     {
+  //       status: 404,
+  //     }
+  //   );
+  // }
+};
