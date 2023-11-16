@@ -7,6 +7,7 @@ import {
 import {
   goalDescriptionGeneratorAPIDetails,
   goalGeneratorAPIDetails,
+  healthAPIDetails,
 } from "./lib/swagger";
 import { rateLimit } from "elysia-rate-limit";
 import { env } from "./env";
@@ -44,15 +45,24 @@ const app = new Elysia()
     })
   )
   .group("/api/v0", (app) =>
-    app.group("/ai", (aiGroup) =>
-      aiGroup
-        .post("/goals", goalGeneratorHandler, goalGeneratorAPIDetails)
-        .post(
-          "/description",
-          goalDescriptionGeneratorHandler,
-          goalDescriptionGeneratorAPIDetails
-        )
-    )
+    app
+      .get(
+        "health",
+        () =>
+          new Response(JSON.stringify({ response: "I'm alive!" }), {
+            status: 200,
+          }),
+        healthAPIDetails
+      )
+      .group("/ai", (aiGroup) =>
+        aiGroup
+          .post("/goals", goalGeneratorHandler, goalGeneratorAPIDetails)
+          .post(
+            "/description",
+            goalDescriptionGeneratorHandler,
+            goalDescriptionGeneratorAPIDetails
+          )
+      )
   )
   .listen(env.PORT);
 

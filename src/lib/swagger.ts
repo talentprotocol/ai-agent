@@ -1,5 +1,20 @@
 import { t } from "elysia";
 
+export const healthAPIDetails = {
+  type: "json",
+
+  detail: {
+    summary: "Returns 200 if the server is alive.",
+    description: "Returns 200 if the server is alive.",
+    tags: ["Generic"],
+    responses: {
+      200: {
+        description: "Server is alive.",
+      },
+    },
+  },
+};
+
 export const goalGeneratorAPIDetails = {
   type: "json",
   body: t.Object({
