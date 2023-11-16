@@ -3,7 +3,7 @@ import { t } from "elysia";
 export const goalGeneratorAPIDetails = {
   type: "json",
   body: t.Object({
-    history: t.Array(t.Array(t.String())),
+    history: t.Array(t.String()),
     talentId: t.Optional(
       t.String({
         description:

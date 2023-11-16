@@ -21,7 +21,7 @@ const regenerateDescriptions =
  */
 export const callLLM = async (
   prompt: string,
-  history: string[][],
+  history: string[],
   generateGoals: boolean = true
 ): Promise<string> => {
   const llm = new ChatOpenAI({
@@ -42,19 +42,17 @@ export const callLLM = async (
   // check if there is a history of past messages
   if (history.length > 0) {
     // if there is, add the history to the messages to send to the model
-    for (let i = 0; i < history.length; i++) {
-      messages.push(
-        new AIMessage({
-          content: JSON.stringify({ goals: history[i] }),
-        })
-      );
-      // new human message, it enforces new 3 different goals with the same JSON format as the previous ones
-      messages.push(
-        new HumanMessage({
-          content: generateGoals ? regenerateGoals : regenerateDescriptions,
-        })
-      );
-    }
+    messages.push(
+      new AIMessage({
+        content: JSON.stringify({ goals: history }),
+      })
+    );
+    // new human message, it enforces new 3 different goals with the same JSON format as the previous ones
+    messages.push(
+      new HumanMessage({
+        content: generateGoals ? regenerateGoals : regenerateDescriptions,
+      })
+    );
   }
   // call the llm
   const response = await llm.call(messages);

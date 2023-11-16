@@ -10,7 +10,7 @@ export const goalGeneratorHandler = async ({
   body,
 }: {
   body: {
-    history: string[][];
+    history: string[];
     talentId?: string;
     bio?: string;
     interests?: string[];
