@@ -12,8 +12,10 @@ import {
 import { rateLimit } from "elysia-rate-limit";
 import { env } from "./env";
 import { rateLimitKeyGenerator } from "./utils";
+import { logger } from "@grotto/logysia";
 
 const app = new Elysia()
+  .use(logger())
   .use(
     swagger({
       documentation: {
@@ -32,11 +34,6 @@ const app = new Elysia()
       },
     })
   )
-  // .use(
-  //   logger({
-  //     autoLogging: true,
-  //   })
-  // )
   .use(
     rateLimit({
       duration: env.RATE_LIMIT_DURATION,
