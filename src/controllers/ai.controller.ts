@@ -89,6 +89,11 @@ export const goalGeneratorHandler = async ({
   }
 };
 
+/**
+ * ElysiaJS handler for generating descriptions.
+ * @param {any} input function input.
+ * @returns {Promise<Response>} returns a JSON containing the list of generated goals descriptions.
+ */
 export const goalDescriptionGeneratorHandler = async ({
   body,
 }: {
