@@ -11,7 +11,7 @@ COPY package.json .
 COPY bun.lockb .
 COPY .env .
 
-RUN /root/.bun/bin/bun install --production
+RUN /root/.bun/bin/bun install
 
 # ? -------------------------
 FROM gcr.io/distroless/base
