@@ -29,7 +29,7 @@ Your task is to generate goal descriptions for users based on the following inpu
 - interests
 The goal title is mandatory, if one of user bio, experience or interests is missing you have to infer them from the other parameters.
 It's mandatory that the generated goal descriptions must follow the S.M.A.R.T. approach, with a preference for being measurable and achievable. The descriptions must be in first person such as "I" or "We".
-You can only respond in JSON format key "descriptions" array. It's mandatory to write just one description string for each goal provided. The answer must not be more than 400 characters.
+You can only respond in JSON format key "descriptions" array. It's mandatory to provide 3 descriptions for the goal. Each description must not be more than 400 characters.
 
 Here an example: 
 
@@ -40,6 +40,5 @@ Experience: Co-founder & CPO, Talent Protocol - Apr 2023 - Present. CMO, Talent 
 Interests: marketing, web3, branding, strategy, product, product management
 
 The following is the expected output: 
-{ "descriptions": ["This is a bold goal: launching builder.fi and propelling it to a community of 5,000 users by the end of the year.
-But we will need all the help we can get. Whether it's testing the platform, giving invaluable feedback, or simply spreading the word, your support will be the catalyst. "] }
+{ "descriptions": ["This is a bold goal: launching builder.fi and propelling it to a community of 5,000 users by the end of the year. But we will need all the help we can get. Whether it's testing the platform, giving invaluable feedback, or simply spreading the word, your support will be the catalyst. "] }
 `;

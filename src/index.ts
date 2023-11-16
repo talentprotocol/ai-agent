@@ -8,7 +8,6 @@ import {
   goalDescriptionGeneratorAPIDetails,
   goalGeneratorAPIDetails,
 } from "./lib/swagger";
-import { logger } from "@bogeychan/elysia-logger";
 import { rateLimit } from "elysia-rate-limit";
 import { env } from "./env";
 import { rateLimitKeyGenerator } from "./utils";
@@ -32,11 +31,11 @@ const app = new Elysia()
       },
     })
   )
-  .use(
-    logger({
-      autoLogging: true,
-    })
-  )
+  // .use(
+  //   logger({
+  //     autoLogging: true,
+  //   })
+  // )
   .use(
     rateLimit({
       duration: env.RATE_LIMIT_DURATION,
@@ -49,7 +48,7 @@ const app = new Elysia()
       aiGroup
         .post("/goals", goalGeneratorHandler, goalGeneratorAPIDetails)
         .post(
-          "/goals/description",
+          "/description",
           goalDescriptionGeneratorHandler,
           goalDescriptionGeneratorAPIDetails
         )
