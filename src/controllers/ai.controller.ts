@@ -1,5 +1,5 @@
-import { env } from "../env";
 import { callLLM } from "../lib/ai";
+import { fetchTalent } from "../lib/talent-protocol";
 
 /**
  * ElysiaJS handler for generating goals.
@@ -21,18 +21,9 @@ export const goalGeneratorHandler = async ({
   let bio: string, interests: string[], experience: string[];
 
   if (talentId) {
-    // retrieve the talent from the mock db
-    const response = await fetch(
-      `https://api.talentprotocol.com/api/v1/talents/${talentId}`,
-      {
-        method: "GET",
-        headers: {
-          "X-API-KEY": env.TP_API_KEY,
-        },
-      }
-    );
+    const talent = await fetchTalent(talentId);
 
-    if (response.status === 404) {
+    if (!talent) {
       return new Response(
         JSON.stringify({ error: `Talent with id ${talentId} not found` }),
         {
@@ -40,20 +31,9 @@ export const goalGeneratorHandler = async ({
         }
       );
     }
-
-    const { talent } = await response.json();
-    const { about, summary, tags, experiences } = talent;
-    // extract bio, interests and experience
-    bio = about || summary;
-    interests = tags.map((tag: { label: string }) => tag.label);
-    experience = experiences.map(
-      (experience: {
-        title: string;
-        institution: string;
-        description: string;
-      }) =>
-        `${experience.title} - ${experience.institution} - ${experience.description}`
-    );
+    bio = talent.bio;
+    interests = talent.interests;
+    experience = talent.experience;
   } else if (body.bio && body.interests && body.experience) {
     // use the body data
     bio = body.bio;
@@ -109,18 +89,9 @@ export const goalDescriptionGeneratorHandler = async ({
   let bio: string, interests: string[], experience: string[];
 
   if (talentId) {
-    // retrieve the talent from the mock db
-    const response = await fetch(
-      `https://api.talentprotocol.com/api/v1/talents/${talentId}`,
-      {
-        method: "GET",
-        headers: {
-          "X-API-KEY": env.TP_API_KEY,
-        },
-      }
-    );
+    const talent = await fetchTalent(talentId);
 
-    if (response.status === 404) {
+    if (!talent) {
       return new Response(
         JSON.stringify({ error: `Talent with id ${talentId} not found` }),
         {
@@ -128,20 +99,9 @@ export const goalDescriptionGeneratorHandler = async ({
         }
       );
     }
-
-    const { talent } = await response.json();
-    const { about, summary, tags, experiences } = talent;
-    // extract bio, interests and experience
-    bio = about || summary;
-    interests = tags.map((tag: { label: string }) => tag.label);
-    experience = experiences.map(
-      (experience: {
-        title: string;
-        institution: string;
-        description: string;
-      }) =>
-        `${experience.title} - ${experience.institution} - ${experience.description}`
-    );
+    bio = talent.bio;
+    interests = talent.interests;
+    experience = talent.experience;
   } else if (body.bio && body.interests && body.experience) {
     // use the body data
     bio = body.bio;
