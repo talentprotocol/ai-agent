@@ -3,7 +3,8 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "start": "bun src/index.ts"
+    "start": "bun src/index.ts",
+    "build": "rm bundle.js && bun build src/runtime.ts --outfile dist/bundle.js"
   },
   "devDependencies": {
     "bun-types": "latest"

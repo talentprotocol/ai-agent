@@ -12,13 +12,8 @@ import {
 import { rateLimit } from "elysia-rate-limit";
 import { env } from "./env";
 import { rateLimitKeyGenerator } from "./utils";
-import { logger } from "@grotto/logysia";
-import { lambda } from "elysia-lambda";
 
-const app = new Elysia()
-  //@ts-ignore
-  .use(lambda())
-  .use(logger())
+export const app = new Elysia()
   .use(
     swagger({
       documentation: {

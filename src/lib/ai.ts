@@ -5,6 +5,7 @@ import {
   goalGeneratorSystemTemplate,
 } from "../constants";
 import { env } from "../env";
+import { ConsoleCallbackHandler } from "langchain/callbacks";
 
 const regenerateGoals =
   'Can you generate 3 more goals for me different from the previous ones? Respond in JSON format with a JSON object with a key "goals" containing a list of all the goals as string.';
@@ -28,6 +29,7 @@ export const callLLM = async (
     modelName: "gpt-3.5-turbo-1106",
     temperature: 0,
     openAIApiKey: env.OPENAI_API_KEY,
+    callbacks: [new ConsoleCallbackHandler()],
   });
   // initialize the messages to send to the model
   const systemMessage = new SystemMessage({
