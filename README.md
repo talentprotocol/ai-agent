@@ -59,6 +59,60 @@ docker build -t talent-protocol-ai-api:latest -f Dockerfile.distroless .
 
 If you are using docker and you don't want to use a `.env` file, make sure to pass the environment variables to the running docker container using the `-e` or `--env` flag.
 
+## ƛ Lambda deployment
+
+In case you want to deploy this API to AWS Lambda, you need to follow these steps:
+
+1. Clone the bun repository to your machine and enter the `bun-lambda` package:
+
+```bash
+git clone git@github.com:oven-sh/bun.git
+cd bun/packages/bun-lambda
+```
+
+2. Install the required dependencies:
+
+```bash
+bun install
+bun install @oclif/plugin-plugins
+```
+
+3. Build the Bun Lambda package (this step is necessary if you want to upload the lambda layer using the `aws-cli`):
+
+```bash
+bun run build-layer --arch aarch64 --release latest --output ./bun-lambda.zip
+```
+
+4. Publish the Bun Lambda layer to your AWS account:
+
+```bash
+aws lambda publish-layer-version --layer-name bun-layer --region eu-central-1 --description "Bun is an incredibly fast JavaScript runtime, bundler, transpiler, and package manager." --license-info MIT --compatible-architectures arm64 --compatible-runtimes provided.al2 provided --zip-file fileb://bun-lambda.zip --output json
+```
+
+You can change the `--region` parameter with your region of choice.
+
+5. Go on the AWS Lambda console and create a new Lambda function. Choose the `Provide your own bootstrap on Amazon Linux 2` option for the runtime.
+
+6. Inside this repository, build the bundle for the lambda:
+
+```bash
+bun run build
+```
+
+This will create a `dist/bundle.js` file that needs to be imported in the lambda source code.
+
+7. Go to the Code Source section of the Lambda function and upload the `dist/bundle.js` file by creating an `index.js` file in the root directory of the lambda. Click on the `Deploy` button to deploy the changes.
+
+8. Go to the Layers section of the Lambda function and add the `bun-layer` layer that you created in step 4.
+
+9. Scroll down to `Runtime settings` and click on `Edit`: update the `Handler` option with `index.fetch`.
+
+10. Go to the `Environment variables` section and add the API environment variables following the `.env.example` file.
+
+11. Enable the Lambda Function URL by going in the Configuration tab, then Function URL and click on `Create function URL`. Make sure to select `NONE` in the `Auth type` if you want the API to be publicly accessible.
+
+12. Navigate to `LAMBDA_URL/swagger` to view the API Swagger UI. It should work fine.
+
 ### ‼️ Rate limiting
 
 This API is rate limited in order to avoid any type of spam. The rate limiting is provided by the `elysia-rate-limit` package.
